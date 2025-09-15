@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import joblib
 from sklearn.linear_model import ElasticNet
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import GridSearchCV, KFold
@@ -58,3 +59,6 @@ if __name__ == "__main__":
     print("  R2 :", r2_score(y, y_pred))
     print("  Pesos:", best_model.named_steps['elasticnet'].coef_)
     print("  Sesgo:", best_model.named_steps['elasticnet'].intercept_)
+
+    # Guardar el modelo
+    joblib.dump(best_model, 'models/elasticnet_california.joblib')

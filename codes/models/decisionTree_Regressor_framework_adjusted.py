@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import joblib
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split, GridSearchCV, KFold
@@ -69,3 +70,7 @@ if __name__ == "__main__":
     print("  MSE:", mean_squared_error(y_test, y_pred_test))
     print("  MAE:", mean_absolute_error(y_test, y_pred_test))
     print("  R2 :", r2_score(y_test, y_pred_test))
+
+    # Guardar el modelo entrenado
+    joblib.dump(best_model, 'models/decision_tree_adjusted.joblib')
+    print("Modelo guardado en 'models/decision_tree_adjusted.joblib'")

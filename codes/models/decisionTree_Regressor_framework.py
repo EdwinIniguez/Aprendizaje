@@ -18,8 +18,39 @@ def separar_X_y(datos):
     y = [fila[-1] for fila in datos]
     return np.array(X), np.array(y)
 
-if __name__ == "__main__":
-    datos = cargar_datos('dataset/datos_regresion.csv')
+def train_modelo(model, X_train, y_train):
+    model.fit(X_train, y_train)
+    return model
+
+def evaluar_modelo(model, X, y):
+    y_pred = model.predict(X)
+    mse = mean_squared_error(y, y_pred)
+    mae = mean_absolute_error(y, y_pred)
+    r2 = r2_score(y, y_pred)
+    return mse, mae, r2
+
+def validacion_cruzada(model, X, y, k=5):
+    cv = KFold(n_splits=k, shuffle=True, random_state=42)
+    resultados = cross_validate(
+        model, X, y, cv=cv,
+        scoring=('neg_mean_squared_error', 'neg_mean_absolute_error', 'r2'),
+        return_train_score=False
+    )
+    return resultados
+
+def imprimir_resultados(resultados):
+    print("Resultados de validación cruzada:")
+    print("  MSE promedio:", -np.mean(resultados['test_neg_mean_squared_error']))
+    print("  MAE promedio:", -np.mean(resultados['test_neg_mean_absolute_error']))
+    print("  R2  promedio:", np.mean(resultados['test_r2']))
+
+def guardar_modelo(model, ruta):
+    import joblib
+    joblib.dump(model, ruta)
+
+
+def main():
+    datos = cargar_datos('dataset/datos_california.csv')
     X, y = separar_X_y(datos)
 
     # Separar en entrenamiento y prueba
@@ -33,25 +64,32 @@ if __name__ == "__main__":
     ])
 
     # Entrenar el modelo
-    pipeline.fit(X_train, y_train)
-    y_pred_train = pipeline.predict(X_train)
-    y_pred_test = pipeline.predict(X_test)
+    modelo = train_modelo(pipeline, X_train, y_train)
 
+    # Evaluar en entrenamiento
+    mse, mae, r2 = evaluar_modelo(modelo, X_train, y_train)
+    print("\nResultados en entrenamiento:")
+    print("  MSE:", mse)
+    print("  MAE:", mae)
+    print("  R2 :", r2)
+    
+    # Evaluar en prueba
+    mse, mae, r2 = evaluar_modelo(modelo, X_test, y_test)
     print("\nResultados en prueba:")
-    print("  MSE:", mean_squared_error(y_test, y_pred_test))
-    print("  MAE:", mean_absolute_error(y_test, y_pred_test))
-    print("  R2 :", r2_score(y_test, y_pred_test))
+    print("  MSE:", mse)
+    print("  MAE:", mae)
+    print("  R2 :", r2)
 
     # Validación cruzada k-fold
     k = 5
-    cv = KFold(n_splits=k, shuffle=True, random_state=42)
-    resultados = cross_validate(
-        pipeline, X, y, cv=cv,
-        scoring=('neg_mean_squared_error', 'neg_mean_absolute_error', 'r2'),
-        return_train_score=False
-    )
-
+    resultados = validacion_cruzada(modelo, X, y, k)
     print(f"\nValidación cruzada ({k}-fold):")
     print("  MSE promedio:", -np.mean(resultados['test_neg_mean_squared_error']))
     print("  MAE promedio:", -np.mean(resultados['test_neg_mean_absolute_error']))
     print("  R2  promedio:", np.mean(resultados['test_r2']))
+
+    # Guardar el modelo entrenado
+    guardar_modelo(modelo, 'models/modelo_decision_tree.joblib')
+
+if __name__ == "__main__":
+    main()
