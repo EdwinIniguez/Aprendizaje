@@ -79,9 +79,9 @@ pip install numpy scikit-learn
 ## Notas
 
 - Puedes modificar los hiperparámetros en los scripts para experimentar con el ajuste y la regularización.
-- El reporte detallado y los gráficos comparativos se encuentran en el documento de análisis (ver instrucciones de la actividad).
+- El reporte detallado y los gráficos comparativos se encuentran en el documento de análisis.
 
 ---
 
-**Autor:** [Tu Nombre]  
+**Autor:** Ediwn Iñiguez Moncada  
 **Licencia:** MIT
