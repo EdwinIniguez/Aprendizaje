@@ -19,7 +19,7 @@ def separar_X_y(datos):
     return np.array(X), np.array(y)
 
 if __name__ == "__main__":
-    datos = cargar_datos('dataset/datos_regresion.csv')
+    datos = cargar_datos('dataset/datos_california.csv')
     X, y = separar_X_y(datos)
 
     # Separar en entrenamiento y prueba
