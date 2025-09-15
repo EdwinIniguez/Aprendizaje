@@ -1,87 +1,97 @@
-# Elastic Net Regression: Manual vs Framework
+# Análisis Comparativo de Modelos de Regresión
 
-Este repositorio contiene la implementación y comparación de un modelo de regresión Elastic Net, tanto **manual** (sin frameworks de machine learning) como usando **scikit-learn**. El objetivo es demostrar el entendimiento de los algoritmos, el preprocesamiento y la evaluación de modelos en un flujo reproducible.
+Este repositorio contiene la implementación, ajuste y análisis comparativo de modelos de regresión sobre el dataset California Housing. El objetivo es evaluar el desempeño de diferentes algoritmos, diagnosticar bias y varianza, y demostrar el efecto de técnicas de regularización y ajuste de hiperparámetros.
 
 ## Estructura del repositorio
 
 ```
 dataset/
-    datos_regresion.csv
-    datos_regresion_escalado.csv
-    archive/
-        Base.csv
-        Variant I.csv
-        ...
+    datos_california.csv
+models/
+    modelo_decision_tree.joblib
+    decision_tree_adjusted.joblib
+    elasticnet_california.joblib
+resources/
+    (aquí se guardan todas las gráficas generadas)
 codes/
     models/
-        elasticNet_manual.py
+        decisionTree_Regressor_framework.py
+        decisionTree_Regressor_framework_adjusted.py
         elasticNet_framework.py
-    preprocess/
-        preprocess_Trial_Data.py
+        ...
+    performanceAnalysis.py
 README.md
 ```
 
-## Descripción de los archivos principales
-
-- **dataset/**: Contiene los archivos de datos utilizados para entrenar y evaluar los modelos.
-- **codes/models/elasticNet_manual.py**: Implementación manual de regresión Elastic Net (sin frameworks).
-- **codes/models/elasticNet_framework.py**: Implementación de Elastic Net usando scikit-learn y pipeline.
-- **codes/preprocess/preprocess_Trial_Data.py**: Script para cargar, escalar y guardar el dataset de diabetes listo para los modelos.
-
 ## Flujo de trabajo
 
-1. **Preprocesamiento de datos**  
-   Ejecuta `codes/preprocess/preprocess_Trial_Data.py` para generar el archivo `datos_regresion.csv` a partir del dataset de diabetes de scikit-learn. El script también puede escalar los datos si es necesario.
+1. **Preprocesamiento de datos**
+   - Ejecuta el script para generar `dataset/datos_california.csv` usando el dataset California Housing de scikit-learn.
 
-2. **Entrenamiento y evaluación de modelos**
-   - **Manual:** Ejecuta `codes/models/elasticNet_manual.py` para entrenar y evaluar el modelo Elastic Net implementado desde cero.
-   - **Framework:** Ejecuta `codes/models/elasticNet_framework.py` para entrenar y evaluar el modelo usando scikit-learn y pipeline.
+2. **Entrenamiento y guardado de modelos**
+   - Entrena y guarda los modelos:
+     - Árbol de Decisión (sin ajuste)
+     - Árbol de Decisión (con hiperparámetros ajustados)
+     - ElasticNet (con regularización)
+   - Los modelos se guardan en la carpeta `models/` usando `joblib`.
 
-3. **Comparación y análisis**
-   - Ambos scripts reportan métricas de desempeño (MSE, MAE, R²) y realizan validación cruzada k-fold.
-   - Puedes comparar los resultados para analizar bias, varianza y el efecto de la regularización.
+3. **Análisis de desempeño**
+   - Ejecuta `performanceAnalysis.py` para:
+     - Cargar los modelos entrenados.
+     - Evaluar cada modelo en conjuntos de entrenamiento y prueba.
+     - Calcular métricas (MSE, MAE, R²).
+     - Diagnosticar bias, varianza y nivel de ajuste (underfit, overfit, buen ajuste).
+     - Graficar:
+       - Predicción vs Real
+       - Histograma de errores
+       - Boxplot de métricas
+       - Curva de aprendizaje
+     - Todas las gráficas se guardan en la carpeta `resources/`.
+
+4. **Reporte**
+   - Utiliza las métricas y gráficas generadas para documentar:
+     - Comparación de desempeño entre modelos.
+     - Diagnóstico de bias y varianza.
+     - Efecto de la regularización y el ajuste de hiperparámetros.
+     - Explicación del nivel de ajuste de cada modelo.
+
+## Ejecución rápida
+
+1. Preprocesa los datos:
+   ```bash
+   python codes/preprocess/preprocess_Trial_Data.py
+   ```
+2. Entrena y guarda los modelos:
+   ```bash
+   python codes/models/decisionTree_Regressor_framework.py
+   python codes/models/decisionTree_Regressor_framework_adjusted.py
+   python codes/models/elasticNet_framework.py
+   ```
+3. Ejecuta el análisis de desempeño:
+   ```bash
+   python codes/performanceAnalysis.py
+   ```
 
 ## Requisitos
 
 - Python 3.8+
 - numpy
 - scikit-learn
+- matplotlib
+- joblib
 
 Instala las dependencias con:
-
 ```bash
-pip install numpy scikit-learn
+pip install numpy scikit-learn matplotlib joblib
 ```
-
-## Ejecución
-
-1. Preprocesa los datos:
-   ```bash
-   python codes/preprocess/preprocess_Trial_Data.py
-   ```
-2. Ejecuta el modelo manual:
-   ```bash
-   python codes/models/elasticNet_manual.py
-   ```
-3. Ejecuta el modelo con framework:
-   ```bash
-   python codes/models/elasticNet_framework.py
-   ```
-
-## Criterios de evaluación cubiertos
-
-- Separación y evaluación con conjuntos de entrenamiento, validación y prueba.
-- Diagnóstico de bias y varianza.
-- Explicación del ajuste del modelo (underfit, fit, overfit).
-- Uso de técnicas de regularización para mejorar el desempeño.
-- Comparación entre implementación manual y con framework.
 
 ## Notas
 
-- Puedes modificar los hiperparámetros en los scripts para experimentar con el ajuste y la regularización.
-- El reporte detallado y los gráficos comparativos se encuentran en el documento de análisis.
+- Puedes agregar o comparar otros modelos siguiendo la misma estructura.
+- El análisis y las gráficas generadas cumplen con los criterios de evaluación del curso: separación de conjuntos, diagnóstico de bias/varianza, nivel de ajuste y uso de regularización.
+- El reporte final debe incluir las gráficas y explicaciones generadas por `performanceAnalysis.py`.
 
 ---
 
-**Autor:** Ediwn Iñiguez Moncada  
+**Autor:** Edwin Iñiguez Moncada  
 **Licencia:** MIT
