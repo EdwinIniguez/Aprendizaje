@@ -1,9 +1,8 @@
 import csv
 import random
 
-# =========================
+
 # Función para cargar datos desde un archivo CSV
-# =========================
 def cargar_datos(ruta_csv):
     """
     Carga datos desde un archivo CSV.
@@ -22,9 +21,8 @@ def cargar_datos(ruta_csv):
             datos.append([float(x) for x in fila])
     return datos
 
-# =========================
+
 # Función para separar características y etiquetas
-# =========================
 def separar_X_y(datos):
     """
     Separa las características (X) y las etiquetas (y) de los datos.
@@ -38,9 +36,8 @@ def separar_X_y(datos):
     y = [fila[-1] for fila in datos]   # Última columna
     return X, y
 
-# =========================
+
 # Función para hacer predicciones lineales
-# =========================
 def prediccion_lineal(X, w, b):
     """
     Hace predicciones lineales usando los pesos y el sesgo.
@@ -54,9 +51,8 @@ def prediccion_lineal(X, w, b):
     """
     return [sum(wi * xi for wi, xi in zip(w, x)) + b for x in X]
 
-# =========================
+
 # Función para calcular el error cuadrático medio (MSE)
-# =========================
 def mse(y_true, y_pred):
     """
     Calcula el error cuadrático medio (MSE).
@@ -68,9 +64,8 @@ def mse(y_true, y_pred):
     """
     return sum((yt - yp) ** 2 for yt, yp in zip(y_true, y_pred)) / len(y_true)
 
-# =========================
+
 # Función para calcular el error absoluto medio (MAE)
-# =========================
 def mae(y_true, y_pred):
     """
     Calcula el error absoluto medio (MAE).
@@ -82,9 +77,8 @@ def mae(y_true, y_pred):
     """
     return sum(abs(yt - yp) for yt, yp in zip(y_true, y_pred)) / len(y_true)
 
-# =========================
+
 # Función para calcular el coeficiente de determinación R^2
-# =========================
 def r2_score(y_true, y_pred):
     """
     Calcula el coeficiente de determinación R^2.
@@ -98,12 +92,11 @@ def r2_score(y_true, y_pred):
     media = sum(y_true) / len(y_true)
     ss_tot = sum((yt - media) ** 2 for yt in y_true)  # Suma total de cuadrados
     ss_res = sum((yt - yp) ** 2 for yt, yp in zip(y_true, y_pred))  # Suma de residuos
-    
+
     return 1 - ss_res / ss_tot if ss_tot != 0 else 0
 
-# =========================
+
 # Función para entrenar un modelo de regresión lineal con Elastic Net
-# =========================
 def elastic_net_regression(X, y, alpha=0.1, l1_ratio=0.5, lr=0.01, epochs=1000):
     """
     Entrena un modelo de regresión lineal con regularización Elastic Net usando descenso por gradiente.
@@ -142,9 +135,53 @@ def elastic_net_regression(X, y, alpha=0.1, l1_ratio=0.5, lr=0.01, epochs=1000):
         b -= lr * db
     return w, b
 
-# =========================
+
+# Función para validación cruzada k-fold
+def k_fold_cross_validation(X, y, k=5, **modelo_params):
+    """
+    Realiza validación cruzada k-fold para Elastic Net.
+    Parámetros:
+        X (list): Características.
+        y (list): Etiquetas.
+        k (int): Número de folds.
+        modelo_params: Parámetros para elastic_net_regression.
+    Retorna:
+        dict: Métricas promedio (MSE, MAE, R2).
+    """
+    n = len(X)
+    indices = list(range(n))
+    random.shuffle(indices)
+    fold_size = math.ceil(n / k)
+    mse_scores, mae_scores, r2_scores = [], [], []
+
+    for fold in range(k):
+        # Crear índices para validación y entrenamiento
+        val_indices = indices[fold*fold_size : (fold+1)*fold_size]
+        train_indices = [i for i in indices if i not in val_indices]
+
+        X_train = [X[i] for i in train_indices]
+        y_train = [y[i] for i in train_indices]
+        X_val = [X[i] for i in val_indices]
+        y_val = [y[i] for i in val_indices]
+
+        # Entrenar modelo
+        w, b = elastic_net_regression(X_train, y_train, **modelo_params)
+        y_pred = prediccion_lineal(X_val, w, b)
+
+        # Calcular métricas
+        mse_scores.append(mse(y_val, y_pred))
+        mae_scores.append(mae(y_val, y_pred))
+        r2_scores.append(r2_score(y_val, y_pred))
+
+    # Promediar métricas
+    return {
+        "MSE_promedio": sum(mse_scores) / k,
+        "MAE_promedio": sum(mae_scores) / k,
+        "R2_promedio": sum(r2_scores) / k
+    }
+
+
 # Ejecución principal del código
-# =========================
 if __name__ == "__main__":
     # Cargar los datos desde un archivo CSV
     datos = cargar_datos('datos_regresion.csv')
