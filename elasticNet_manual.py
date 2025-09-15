@@ -1,6 +1,6 @@
 import csv
 import random
-
+import math
 
 # Función para cargar datos desde un archivo CSV
 def cargar_datos(ruta_csv):
@@ -201,3 +201,10 @@ if __name__ == "__main__":
     print("Elastic Net R2:", r2_score(y, y_pred_en))
     print("Pesos:", w_en)
     print("Sesgo:", b_en)
+
+    # Validación cruzada k-fold
+    resultados_cv = k_fold_cross_validation(X, y, k=5, alpha=0.1, l1_ratio=0.5, lr=0.01, epochs=1000)
+    print("\nValidación cruzada (5-fold):")
+    print("MSE promedio:", resultados_cv["MSE_promedio"])
+    print("MAE promedio:", resultados_cv["MAE_promedio"])
+    print("R2 promedio:", resultados_cv["R2_promedio"])
