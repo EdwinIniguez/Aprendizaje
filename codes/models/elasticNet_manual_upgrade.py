@@ -184,7 +184,7 @@ def k_fold_cross_validation(X, y, k=5, **modelo_params):
 # Ejecución principal del código
 if __name__ == "__main__":
     # Cargar los datos desde un archivo CSV
-    datos = cargar_datos('dataset/datos_regresion.csv')
+    datos = cargar_datos('dataset/datos_regresion_escalado.csv')
 
     # Separar características y etiquetas
     X, y = separar_X_y(datos)

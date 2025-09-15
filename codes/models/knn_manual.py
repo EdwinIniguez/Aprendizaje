@@ -116,7 +116,7 @@ def reporte_metricas(y_true, y_pred):
 # Ejecución principal
 if __name__ == "__main__":
     # Cambia 'datos.csv' por tu archivo de datos
-    datos = cargar_datos('datos.csv')
+    datos = cargar_datos('dataset/datos_regresion.csv')
 
     # Divide en entrenamiento y prueba (aquí, los últimos 5 para prueba)
     datos_entrenamiento = datos[:-5]

@@ -4,6 +4,7 @@ from sklearn.linear_model import ElasticNet
 from sklearn.metrics import make_scorer, mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import cross_validate, KFold
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 def cargar_datos(ruta_csv):
     """Carga datos desde un archivo CSV."""
@@ -21,8 +22,9 @@ def separar_X_y(datos):
     return np.array(X), np.array(y)
 
 def crear_pipeline(alpha=0.1, l1_ratio=0.5):
-    """Crea una pipeline solo con ElasticNet (sin escalado)."""
+    """Crea una pipeline con escalado y ElasticNet."""
     return Pipeline([
+        ('scaler', StandardScaler()),
         ('elasticnet', ElasticNet(alpha=alpha, l1_ratio=l1_ratio, max_iter=1000))
     ])
 
@@ -30,7 +32,7 @@ if __name__ == "__main__":
     datos = cargar_datos('dataset/datos_regresion.csv')
     X, y = separar_X_y(datos)
 
-    # Crear pipeline sin escalado
+    # Crear pipeline
     pipeline = crear_pipeline(alpha=0.1, l1_ratio=0.5)
     pipeline.fit(X, y)
     y_pred = pipeline.predict(X)
