@@ -1,6 +1,33 @@
-# Análisis Comparativo de Modelos de Regresión
 
-Este repositorio contiene la implementación, ajuste y análisis comparativo de modelos de regresión sobre el dataset California Housing. El objetivo es evaluar el desempeño de diferentes algoritmos, diagnosticar bias y varianza, y demostrar el efecto de técnicas de regularización y ajuste de hiperparámetros.
+# Aprendizaje - Análisis Comparativo de Modelos de Regresión
+
+Este repositorio forma parte del **Portafolio de Análisis** y contiene la implementación, ajuste y análisis comparativo de modelos de regresión sobre el dataset California Housing. Aquí se documentan evidencias para los indicadores de la rúbrica de la asignatura, con referencias cruzadas para facilitar la evaluación.
+
+---
+
+## Evidencias para el Portafolio
+
+### Técnicas Analíticas (SMA0102A)
+- **Preprocesamiento:**
+   - Imputación y escalamiento en `codes/preprocess/`
+   - Análisis de outliers y normalización en notebooks y scripts
+- **Explicación de técnicas:**
+   - Justificación y relevancia de cada técnica en este README y en los notebooks
+
+### Análisis de Información (SMA0104A)
+- **Evaluación con train/test:**
+   - `codes/performanceAnalysis.py` y gráficas en `resources/`
+- **Diagnóstico de bias y varianza:**
+   - Diagnóstico automático en `performanceAnalysis.py`
+   - Gráficas: `pred_vs_real_*.png`, `boxplot_metricas_*.png`, `learning_curve_*.png`
+- **Nivel de ajuste y regularización:**
+   - Explicación y evidencia en el reporte PDF y scripts de modelos
+   - Implementaciones de regularización en `codes/models/elasticNet_framework.py` y `codes/models/elasticNet_manual.py`
+
+### Repositorio en el Portafolio
+Este repositorio es referenciado en el [Portafolio de Análisis](../TC3006C.101-Portafolio-Analisis/README.md) como evidencia principal para los indicadores de técnicas analíticas, bias/varianza y regularización.
+
+---
 
 ## Estructura del repositorio
 
@@ -85,11 +112,13 @@ Instala las dependencias con:
 pip install numpy scikit-learn matplotlib joblib
 ```
 
-## Notas
 
-- Puedes agregar o comparar otros modelos siguiendo la misma estructura.
-- El análisis y las gráficas generadas cumplen con los criterios de evaluación del curso: separación de conjuntos, diagnóstico de bias/varianza, nivel de ajuste y uso de regularización.
-- El reporte final debe incluir las gráficas y explicaciones generadas por `performanceAnalysis.py`.
+## Notas para Evaluación
+- Este README y los scripts/notebooks están organizados para facilitar la localización de evidencias por indicador.
+- El análisis y las gráficas generadas cumplen con los criterios de la rúbrica: separación de conjuntos, diagnóstico de bias/varianza, nivel de ajuste y uso de regularización.
+- El reporte final y las gráficas están pensados para ser fácilmente referenciables desde el portafolio.
+
+---
 
 ---
 
